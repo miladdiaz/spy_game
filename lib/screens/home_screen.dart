@@ -30,15 +30,22 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Counter(
-                  label: 'Spy',
-                  count: 4,
-                  startFrom: 1,
-                  onChange: gameNotifier.setSpyCount),
+                label: 'Spy',
+                count: 4,
+                startFrom: 1,
+                onChange: gameNotifier.setSpyCount,
+              ),
               Counter(
                 label: 'Citizens',
                 count: 30,
                 startFrom: 2,
                 onChange: gameNotifier.setCitizenCount,
+              ),
+              Counter(
+                label: 'Time',
+                count: 30,
+                startFrom: 1,
+                onChange: gameNotifier.setGameTime,
               ),
             ],
           ),

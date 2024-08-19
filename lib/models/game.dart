@@ -8,6 +8,7 @@ class Game {
   final int currentPlayerIndex;
   final List<Player> players;
   final String state;
+  final Duration time;
 
   const Game({
     this.citizenCount = 2,
@@ -17,6 +18,7 @@ class Game {
     this.currentPlayerIndex = 0,
     this.players = const [],
     this.state = 'idle',
+    this.time = const Duration(minutes: 5),
   });
 
   Game copyWith({
@@ -27,6 +29,7 @@ class Game {
     int? currentPlayerIndex,
     List<Player>? players,
     String? state,
+    Duration? time,
   }) {
     return Game(
       citizenCount: citizenCount ?? this.citizenCount,
@@ -36,6 +39,7 @@ class Game {
       currentPlayerIndex: currentPlayerIndex ?? this.currentPlayerIndex,
       players: players ?? this.players,
       state: state ?? this.state,
+      time: time ?? this.time,
     );
   }
 }

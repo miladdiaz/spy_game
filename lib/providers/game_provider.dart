@@ -20,6 +20,10 @@ class GameNotifier extends Notifier<Game> {
     state = state.copyWith(spyCount: value);
   }
 
+  void setGameTime(int value) {
+    state = state.copyWith(time: Duration(minutes: value));
+  }
+
   void startGame() {
     // set state of game
     state = state.copyWith(state: 'init');

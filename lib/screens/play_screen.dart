@@ -51,8 +51,8 @@ class PlayScreen extends ConsumerWidget {
                     )
                   : const SizedBox(),
               game.state == "timer"
-                  ? const TimerWidget(
-                      time: Duration(minutes: 5),
+                  ? TimerWidget(
+                      time: game.time,
                     )
                   : const SizedBox()
             ],
