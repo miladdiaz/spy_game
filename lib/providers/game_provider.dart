@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
-import 'package:spy_game/models/player.dart';
+
+import '../models/player.dart';
 
 class GameNotifier extends Notifier<Game> {
   @override
@@ -11,41 +12,59 @@ class GameNotifier extends Notifier<Game> {
     return const Game();
   }
 
-  void setPlayerCount(int value) {
-    final players = List.generate(
-      value,
-      (index) => Player(
-        name: 'Player ${index + 1}',
-        role: "player",
-      ),
-    );
-    state = state.copyWith(players: players);
+  void setCitizenCount(int value) {
+    state = state.copyWith(citizenCount: value);
   }
 
   void setSpyCount(int value) {
-    final spies = List.generate(
-      value,
-      (index) => Player(
-        name: 'Player ${index + 1}',
-        role: "spy",
-      ),
-    );
-    state = state.copyWith(spies: spies);
+    state = state.copyWith(spyCount: value);
   }
 
   void startGame() {
+    // set state of game
+    state = state.copyWith(state: 'init');
+
+    // reset current player index
+    state = state.copyWith(currentPlayerIndex: 0);
+
+    // set random word from constants
     final random = Random();
     final word = constants.words[random.nextInt(constants.words.length)];
 
-    state = state.copyWith(word: word);
+    // generate players
+    final citizens = List.generate(
+      state.citizenCount,
+      (_) => const Player(name: 'Player ', role: "player"),
+    );
+
+    // generate spies
+    final spies = List.generate(
+      state.spyCount,
+      (_) => const Player(name: 'Player', role: "spy"),
+    );
+
+    // combine players and spies and shuffle
+    final List<Player> players = [...citizens, ...spies];
+    players.shuffle();
+
+    state = state.copyWith(word: word, players: players);
   }
 
-  void showWord() {
-    state = state.copyWith(isShowWord: true);
+  void setShowWord(bool value) {
+    state = state.copyWith(isShowWord: value);
   }
 
-  void hideWord() {
-    state = state.copyWith(isShowWord: false);
+  void startTimer() {
+    state = state.copyWith(state: "timer");
+  }
+
+  void nextPlayer() {
+    final currentPlayer = state.currentPlayerIndex + 1;
+    if (currentPlayer >= state.players.length) {
+      return;
+    }
+
+    state = state.copyWith(currentPlayerIndex: currentPlayer);
   }
 }
 

@@ -1,38 +1,41 @@
 import 'package:spy_game/models/player.dart';
 
 class Game {
-  final List<Player> players;
-  final List<Player> spies;
+  final int citizenCount;
+  final int spyCount;
   final String? word;
   final bool isShowWord;
-  final int currentPlayer;
+  final int currentPlayerIndex;
+  final List<Player> players;
+  final String state;
 
   const Game({
-    this.players = const [
-      Player(name: "Player 1", role: "player"),
-      Player(name: "Player 2", role: "player"),
-    ],
-    this.spies = const [
-      Player(name: "Player 3", role: "spy"),
-    ],
+    this.citizenCount = 2,
+    this.spyCount = 1,
     this.word,
     this.isShowWord = false,
-    this.currentPlayer = 1,
+    this.currentPlayerIndex = 0,
+    this.players = const [],
+    this.state = 'idle',
   });
 
   Game copyWith({
-    List<Player>? players,
-    List<Player>? spies,
+    int? citizenCount,
+    int? spyCount,
     String? word,
     bool? isShowWord,
-    int? currentPlayer,
+    int? currentPlayerIndex,
+    List<Player>? players,
+    String? state,
   }) {
     return Game(
-      players: players ?? this.players,
+      citizenCount: citizenCount ?? this.citizenCount,
+      spyCount: spyCount ?? this.spyCount,
       word: word ?? this.word,
       isShowWord: isShowWord ?? this.isShowWord,
-      currentPlayer: currentPlayer ?? this.currentPlayer,
-      spies: spies ?? this.spies,
+      currentPlayerIndex: currentPlayerIndex ?? this.currentPlayerIndex,
+      players: players ?? this.players,
+      state: state ?? this.state,
     );
   }
 }

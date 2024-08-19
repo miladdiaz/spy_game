@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/widgets/button.dart';
+import 'package:spy_game/widgets/timer.dart';
+import 'package:spy_game/widgets/word_box.dart';
 
 class PlayScreen extends ConsumerWidget {
   const PlayScreen({super.key});
@@ -8,6 +11,7 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -18,42 +22,39 @@ class PlayScreen extends ConsumerWidget {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(height: 32),
-              const Text(
-                'Hold the Box to see the word',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 32),
-              GestureDetector(
-                onTapDown: (_) {
-                  ref.read(gameNotifierProvider.notifier).showWord();
-                },
-                onTapUp: (_) {
-                  ref.read(gameNotifierProvider.notifier).hideWord();
-                },
-                child: Container(
-                  height: MediaQuery.of(context).size.width * 0.80,
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Center(
-                    child: game.isShowWord
-                        ? Text(
-                            game.word!,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : null,
-                  ),
-                ),
-              )
+              const SizedBox(height: 16),
+              game.state == "init"
+                  ? Column(
+                      children: [
+                        const WordBox(),
+                        Text(
+                          '${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        game.currentPlayerIndex + 1 == game.players.length
+                            ? Button(
+                                label: 'Start Timer',
+                                onPressed: () {
+                                  gameNotifier.startTimer();
+                                },
+                                color: Colors.green,
+                              )
+                            : Button(
+                                label: 'Next Player',
+                                onPressed: gameNotifier.nextPlayer,
+                              ),
+                      ],
+                    )
+                  : const SizedBox(),
+              game.state == "timer"
+                  ? const TimerWidget(
+                      time: Duration(minutes: 5),
+                    )
+                  : const SizedBox()
             ],
           ),
         ),

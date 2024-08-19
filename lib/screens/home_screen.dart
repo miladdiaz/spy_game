@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/counter.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -9,6 +10,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -18,10 +20,10 @@ class HomeScreen extends ConsumerWidget {
       body: Column(
         children: [
           const SizedBox(height: 16),
-          // Image.asset(
-          //   'assets/images/spy.png',
-          //   height: 200,
-          // ),
+          Image.asset(
+            'assets/images/spy.png',
+            height: 200,
+          ),
           const SizedBox(height: 64),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -31,44 +33,24 @@ class HomeScreen extends ConsumerWidget {
                   label: 'Spy',
                   count: 4,
                   startFrom: 1,
-                  onChange: (value) {
-                    ref.read(gameNotifierProvider.notifier).setSpyCount(value);
-                  }),
+                  onChange: gameNotifier.setSpyCount),
               Counter(
-                label: 'Players',
+                label: 'Citizens',
                 count: 30,
                 startFrom: 2,
-                onChange: (value) {
-                  ref.read(gameNotifierProvider.notifier).setPlayerCount(value);
-                },
+                onChange: gameNotifier.setCitizenCount,
               ),
             ],
           ),
           const SizedBox(height: 64),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            ),
+          Button(
+            label:
+                'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
             onPressed: () {
-              ref.read(gameNotifierProvider.notifier).startGame();
+              gameNotifier.startGame();
               Navigator.pushNamed(context, '/play');
             },
-            child: Text(
-              'Start with ${game.players.length} Players and ${game.spies.length} Spy',
-              style: const TextStyle(color: Colors.white),
-            ),
           ),
-
-          // game.players.map((e) => Text(e.name)).toList(),
-          Column(
-            children:
-                game.players.map((e) => Text('${e.name}-${e.role}')).toList(),
-          ),
-          Column(
-            children:
-                game.spies.map((e) => Text('${e.name}-${e.role}')).toList(),
-          )
         ],
       ),
     );
