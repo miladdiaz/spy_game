@@ -28,7 +28,7 @@ class PlayScreen extends ConsumerWidget {
                       children: [
                         const WordBox(),
                         Text(
-                          '${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex}',
+                          '${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex + 1}',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
