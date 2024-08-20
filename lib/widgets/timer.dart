@@ -42,10 +42,9 @@ class _TimerWidgetState extends State<TimerWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.width * 0.80,
-      width: MediaQuery.of(context).size.width * 0.80,
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+        color: Colors.deepPurple.withOpacity(0.4),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(

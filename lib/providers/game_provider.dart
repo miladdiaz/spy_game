@@ -59,7 +59,7 @@ class GameNotifier extends Notifier<Game> {
   }
 
   void startTimer() {
-    state = state.copyWith(state: "timer");
+    state = state.copyWith(state: "timer", isShowWord: false);
   }
 
   void nextPlayer() {

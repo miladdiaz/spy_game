@@ -9,7 +9,7 @@ class Button extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.label,
-    this.color = Colors.blue,
+    this.color = Colors.deepPurple,
   });
 
   @override

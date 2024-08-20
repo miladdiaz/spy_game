@@ -18,7 +18,7 @@ class Game {
     this.currentPlayerIndex = 0,
     this.players = const [],
     this.state = 'idle',
-    this.time = const Duration(minutes: 5),
+    this.time = const Duration(minutes: 1),
   });
 
   Game copyWith({

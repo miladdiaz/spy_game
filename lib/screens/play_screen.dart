@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/widgets/button.dart';
+import 'package:spy_game/widgets/logo.dart';
+import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/widgets/sidebar.dart';
 import 'package:spy_game/widgets/timer.dart';
 import 'package:spy_game/widgets/word_box.dart';
 
@@ -14,49 +16,71 @@ class PlayScreen extends ConsumerWidget {
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('SPY Game | Play'),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              game.state == "init"
-                  ? Column(
-                      children: [
-                        const WordBox(),
-                        Text(
-                          '${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex + 1}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        game.currentPlayerIndex + 1 == game.players.length
-                            ? Button(
-                                label: 'Start Timer',
-                                onPressed: () {
-                                  gameNotifier.startTimer();
-                                },
-                                color: Colors.green,
-                              )
-                            : Button(
-                                label: 'Next Player',
-                                onPressed: gameNotifier.nextPlayer,
-                              ),
-                      ],
-                    )
-                  : const SizedBox(),
-              game.state == "timer"
-                  ? TimerWidget(
-                      time: game.time,
-                    )
-                  : const SizedBox()
-            ],
+      backgroundColor: const Color.fromARGB(255, 30, 13, 63),
+      body: Container(
+        padding: const EdgeInsets.only(top: 64),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/dark_house.png"),
+            fit: BoxFit.contain,
+            alignment: Alignment.bottomCenter,
           ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Expanded(
+              child: Sidebar(position: "left"),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: [
+                  const Logo(),
+                  const WordBox(),
+                  Text(
+                    "${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex + 1}",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  game.state == "timer"
+                      ? TimerWidget(
+                          time: game.time,
+                        )
+                      : game.isShowWord
+                          ? Button(
+                              color: Colors.green,
+                              onPressed: () {
+                                if (game.currentPlayerIndex + 1 ==
+                                    game.players.length) {
+                                  print('startTimer');
+                                  // start timer
+                                  gameNotifier.startTimer();
+                                } else {
+                                  gameNotifier.setShowWord(false);
+                                  gameNotifier.nextPlayer();
+                                }
+                              },
+                              label: "I got it, let's go",
+                            )
+                          : Button(
+                              onPressed: () {
+                                gameNotifier.setShowWord(true);
+                              },
+                              label: "show me my role",
+                            ),
+                ],
+              ),
+            ),
+            const Expanded(
+              child: Sidebar(position: "right"),
+            )
+          ],
         ),
       ),
     );

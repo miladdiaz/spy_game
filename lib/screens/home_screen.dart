@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/counter.dart';
+import 'package:spy_game/widgets/logo.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, t});
@@ -13,52 +14,57 @@ class HomeScreen extends ConsumerWidget {
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('SPY Game'),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Image.asset(
-            'assets/images/spy.png',
-            height: 200,
+      backgroundColor: const Color.fromARGB(255, 30, 13, 63),
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/dark_house.png"),
+              fit: BoxFit.contain,
+              alignment: Alignment.bottomCenter,
+            ),
           ),
-          const SizedBox(height: 64),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
             children: [
-              Counter(
-                label: 'Spy',
-                count: 4,
-                startFrom: 1,
-                onChange: gameNotifier.setSpyCount,
+              const SizedBox(height: 16),
+              const Logo(),
+              const SizedBox(height: 64),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Counter(
+                    label: 'Spy',
+                    count: 4,
+                    startFrom: 1,
+                    onChange: gameNotifier.setSpyCount,
+                  ),
+                  Counter(
+                    label: 'Citizens',
+                    count: 30,
+                    startFrom: 2,
+                    onChange: gameNotifier.setCitizenCount,
+                  ),
+                  Counter(
+                    label: 'Time',
+                    count: 30,
+                    startFrom: 1,
+                    onChange: gameNotifier.setGameTime,
+                  ),
+                ],
               ),
-              Counter(
-                label: 'Citizens',
-                count: 30,
-                startFrom: 2,
-                onChange: gameNotifier.setCitizenCount,
-              ),
-              Counter(
-                label: 'Time',
-                count: 30,
-                startFrom: 1,
-                onChange: gameNotifier.setGameTime,
+              const SizedBox(height: 64),
+              Button(
+                label:
+                    'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
+                onPressed: () {
+                  gameNotifier.startGame();
+                  Navigator.pushNamed(context, '/play');
+                },
               ),
             ],
           ),
-          const SizedBox(height: 64),
-          Button(
-            label:
-                'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
-            onPressed: () {
-              gameNotifier.startGame();
-              Navigator.pushNamed(context, '/play');
-            },
-          ),
-        ],
+        ),
       ),
     );
   }

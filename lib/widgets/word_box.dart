@@ -9,46 +9,33 @@ class WordBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
 
-    return Column(
-      children: [
-        const Text(
-          'Hold the Box to see the word',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 16),
+        height: MediaQuery.of(context).size.width * 0.45,
+        width: MediaQuery.of(context).size.width * 0.45,
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.5),
+            width: 4,
           ),
         ),
-        const SizedBox(height: 16),
-        GestureDetector(
-          onTapDown: (_) {
-            ref.read(gameNotifierProvider.notifier).setShowWord(true);
-          },
-          onTapUp: (_) {
-            ref.read(gameNotifierProvider.notifier).setShowWord(false);
-          },
-          child: Container(
-            height: MediaQuery.of(context).size.width * 0.80,
-            width: MediaQuery.of(context).size.width * 0.80,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Center(
-              child: game.isShowWord
-                  ? Text(
-                      game.players[game.currentPlayerIndex].role == 'spy'
-                          ? 'SPY'
-                          : game.word!,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : null,
-            ),
-          ),
+        child: Center(
+          child: game.isShowWord
+              ? Text(
+                  game.players[game.currentPlayerIndex].role == 'spy'
+                      ? 'SPY'
+                      : game.word!,
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white.withOpacity(0.3)),
+                )
+              : null,
         ),
-      ],
+      ),
     );
   }
 }
