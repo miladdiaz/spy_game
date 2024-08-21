@@ -14,6 +14,7 @@ class PlayScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
+    gameNotifier.startSocket();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 13, 63),
@@ -38,9 +39,17 @@ class PlayScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   const Logo(),
+                  const SizedBox(height: 16),
+                  Button(onPressed: gameNotifier.startSocket, label: "label"),
+                  Text(
+                    game.token ?? "No token",
+                    style: const TextStyle(color: Colors.white, fontSize: 24),
+                  ),
                   const WordBox(),
                   Text(
-                    "${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex + 1}",
+                    game.players.isEmpty
+                        ? "Waiting for players"
+                        : "${game.players[game.currentPlayerIndex].name} ${game.currentPlayerIndex + 1}",
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

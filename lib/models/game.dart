@@ -9,6 +9,7 @@ class Game {
   final List<Player> players;
   final String state;
   final Duration time;
+  final String? token;
 
   const Game({
     this.citizenCount = 2,
@@ -19,7 +20,16 @@ class Game {
     this.players = const [],
     this.state = 'idle',
     this.time = const Duration(minutes: 1),
+    this.token,
   });
+
+  factory Game.fromJson(Map<String, dynamic> json) {
+    return Game(
+      citizenCount: json['citizenCount'],
+      spyCount: json['spyCount'],
+      word: json['word'],
+    );
+  }
 
   Game copyWith({
     int? citizenCount,
@@ -30,6 +40,7 @@ class Game {
     List<Player>? players,
     String? state,
     Duration? time,
+    String? token,
   }) {
     return Game(
       citizenCount: citizenCount ?? this.citizenCount,
@@ -40,6 +51,7 @@ class Game {
       players: players ?? this.players,
       state: state ?? this.state,
       time: time ?? this.time,
+      token: token ?? this.token,
     );
   }
 }
