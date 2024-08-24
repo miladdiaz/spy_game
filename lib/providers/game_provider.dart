@@ -38,24 +38,6 @@ class GameNotifier extends Notifier<Game> {
     final word = constants.words[random.nextInt(constants.words.length)];
     state = state.copyWith(word: word);
 
-    // generate players
-    // final citizens = List.generate(
-    //   state.citizenCount,
-    //   (_) => const Player(name: 'Player ', role: "player"),
-    // );
-
-    // // generate spies
-    // final spies = List.generate(
-    //   state.spyCount,
-    //   (_) => const Player(name: 'Player', role: "spy"),
-    // );
-
-    // combine players and spies and shuffle
-    // final List<Player> players = [...citizens, ...spies];
-    // players.shuffle();
-
-    // state = state.copyWith(word: word, players: players);
-
     await createGameOnServer();
   }
 
@@ -65,15 +47,6 @@ class GameNotifier extends Notifier<Game> {
 
   void startTimer() {
     state = state.copyWith(state: "timer", isShowWord: false);
-  }
-
-  void nextPlayer() {
-    final currentPlayer = state.currentPlayerIndex + 1;
-    if (currentPlayer >= state.players.length) {
-      return;
-    }
-
-    state = state.copyWith(currentPlayerIndex: currentPlayer);
   }
 
   Future<List<Game>> getGames() async {
