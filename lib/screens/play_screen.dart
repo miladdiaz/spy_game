@@ -31,9 +31,7 @@ class PlayScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Expanded(
-              child: Sidebar(position: "left"),
-            ),
+            const Sidebar(position: "left"),
             Expanded(
               flex: 3,
               child: Column(
@@ -86,9 +84,7 @@ class PlayScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const Expanded(
-              child: Sidebar(position: "right"),
-            )
+            const Sidebar(position: "right"),
           ],
         ),
       ),
