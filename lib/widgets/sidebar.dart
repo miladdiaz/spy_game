@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
-import 'package:spy_game/widgets/Player.dart';
+import 'package:spy_game/widgets/player_widget.dart';
 
 class Sidebar extends ConsumerWidget {
   final String position;
@@ -49,7 +49,7 @@ class Sidebar extends ConsumerWidget {
               position == "left"
                   ? (game.players.length / 2).ceil()
                   : (game.players.length / 2).floor(),
-              (i) => Player(
+              (i) => PlayerWidget(
                 index: (position == "left"
                     ? i
                     : i + (game.players.length / 2).ceil()),

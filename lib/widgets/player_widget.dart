@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
 
-class Player extends ConsumerWidget {
+class PlayerWidget extends ConsumerWidget {
   final int index;
-  const Player({super.key, required this.index});
+  const PlayerWidget({super.key, required this.index});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
