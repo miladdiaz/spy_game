@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/helpers/number.dart';
+import 'package:spy_game/models/player.dart';
 import 'package:spy_game/widgets/player_widget.dart';
 
 class Sidebar extends ConsumerWidget {
   final String position;
-  const Sidebar({super.key, required this.position});
+  final List<Player>? players;
+  const Sidebar({
+    super.key,
+    required this.position,
+    this.players,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final game = ref.watch(gameNotifierProvider);
-
     return Expanded(
       child: Container(
         constraints: const BoxConstraints.expand(),
@@ -44,18 +48,20 @@ class Sidebar extends ConsumerWidget {
           ),
         ),
         child: SingleChildScrollView(
-          child: Column(
-            children: List.generate(
-              position == "left"
-                  ? (game.players.length / 2).ceil()
-                  : (game.players.length / 2).floor(),
-              (i) => PlayerWidget(
-                index: (position == "left"
-                    ? i
-                    : i + (game.players.length / 2).ceil()),
-              ),
-            ),
-          ),
+          child: players != null
+              ? Column(
+                  children: List.generate(
+                    players!.length,
+                    (index) => position == "right"
+                        ? isOdd(index)
+                            ? PlayerWidget(index: index)
+                            : const SizedBox()
+                        : isEven(index)
+                            ? PlayerWidget(index: index)
+                            : const SizedBox(),
+                  ),
+                )
+              : const SizedBox(),
         ),
       ),
     );
