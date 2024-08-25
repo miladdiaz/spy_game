@@ -3,11 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 
-class JoinGameContainer extends ConsumerWidget {
+class JoinGameContainer extends ConsumerStatefulWidget {
   const JoinGameContainer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  JoinGameContainerState createState() => JoinGameContainerState();
+}
+
+class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
+  final TextEditingController tokenController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
     return Container(
@@ -28,6 +40,7 @@ class JoinGameContainer extends ConsumerWidget {
       child: Column(
         children: [
           TextField(
+            controller: tokenController,
             keyboardType: TextInputType.text,
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
@@ -54,7 +67,7 @@ class JoinGameContainer extends ConsumerWidget {
             color: Colors.green,
             label: 'Join a game',
             onPressed: () {
-              gameNotifier.joinGame("23478");
+              gameNotifier.joinGame(tokenController.text);
               Navigator.pushNamed(context, '/play');
             },
           ),
