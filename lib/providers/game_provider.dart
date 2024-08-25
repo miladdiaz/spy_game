@@ -75,8 +75,6 @@ class GameNotifier extends Notifier<Game> {
     state = state.copyWith(token: result['token']);
   }
 
-  List<String> pls = [];
-
   void startSocket() {
     io.Socket socket = io.io('http://192.168.11.111:3000',
         io.OptionBuilder().setTransports(['websocket']).build());
@@ -98,6 +96,10 @@ class GameNotifier extends Notifier<Game> {
     socket.on('error', (_) => print(_));
     socket.on('connect_error', (_) => print(_));
     socket.on('connecting', (_) => print(_));
+  }
+
+  void joinGame(String token) {
+    state = state.copyWith(token: token);
   }
 }
 
