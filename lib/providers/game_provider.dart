@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spy_game/env.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
@@ -76,8 +77,10 @@ class GameNotifier extends Notifier<Game> {
   }
 
   void startSocket() {
-    io.Socket socket = io.io('http://192.168.11.111:3000',
-        io.OptionBuilder().setTransports(['websocket']).build());
+    io.Socket socket = io.io(
+      backendUrl,
+      io.OptionBuilder().setTransports(['websocket']).build(),
+    );
 
     socket.onConnect((_) {
       print('connect');
