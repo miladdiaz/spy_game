@@ -28,7 +28,7 @@ class GameNotifier extends Notifier<Game> {
 
   Future<void> startGame() async {
     // set state of game
-    state = state.copyWith(state: 'init');
+    state = state.copyWith(state: GameState.waiting);
 
     // reset current player index
     state = state.copyWith(currentPlayerIndex: 0);
@@ -46,7 +46,7 @@ class GameNotifier extends Notifier<Game> {
   }
 
   void startTimer() {
-    state = state.copyWith(state: "timer", isShowWord: false);
+    state = state.copyWith(state: GameState.timer, isShowWord: false);
   }
 
   Future<List<Game>> getGames() async {
@@ -72,7 +72,7 @@ class GameNotifier extends Notifier<Game> {
 
     final result = jsonDecode(response.body);
 
-    state = state.copyWith(token: result['token']);
+    state = state.copyWith(token: result['token'], word: result['word']);
   }
 
   void startSocket() {

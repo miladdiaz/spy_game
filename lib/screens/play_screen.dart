@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/helpers/number.dart';
+import 'package:spy_game/models/game.dart';
 import 'package:spy_game/widgets/logo.dart';
 import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/widgets/play_screen_header.dart';
@@ -49,13 +50,22 @@ class PlayScreen extends ConsumerWidget {
                         children: [
                           const Logo(),
                           const SizedBox(height: 16),
-                          const WordBox(),
-                          const SizedBox(height: 16),
-                          game.state == "timer"
-                              ? TimerWidget(
-                                  time: game.time,
-                                )
-                              : const SizedBox(),
+                          // show waiting for players
+                          if (game.state == GameState.waiting)
+                            const Text(
+                              "Waiting for players",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            ),
+                          // show Timer
+                          if (game.state == GameState.timer)
+                            TimerWidget(
+                              time: game.time,
+                            ),
+                          // show word
+                          if (game.state == GameState.started) const WordBox(),
                         ],
                       ),
                     ),
