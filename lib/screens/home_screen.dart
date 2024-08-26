@@ -46,50 +46,47 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Logo(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Counter(
-                        label: 'Spy',
-                        count: 4,
-                        startFrom: 1,
-                        onChange: gameNotifier.setSpyCount,
-                      ),
-                      Counter(
-                        label: 'Citizens',
-                        count: 30,
-                        startFrom: 2,
-                        onChange: gameNotifier.setCitizenCount,
-                      ),
-                      Counter(
-                        label: 'Time',
-                        count: 30,
-                        startFrom: 1,
-                        onChange: gameNotifier.setGameTime,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 64),
-                  Button(
-                    label:
-                        'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
-                    onPressed: () {
-                      gameNotifier.startGame();
-                    },
-                  ),
-                  const SizedBox(height: 64),
-                  const JoinGameContainer(),
-                ],
-              ),
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Logo(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Counter(
+                      label: 'Spy',
+                      count: 4,
+                      startFrom: 1,
+                      onChange: gameNotifier.setSpyCount,
+                    ),
+                    Counter(
+                      label: 'Citizens',
+                      count: 30,
+                      startFrom: 2,
+                      onChange: gameNotifier.setCitizenCount,
+                    ),
+                    Counter(
+                      label: 'Time',
+                      count: 30,
+                      startFrom: 1,
+                      onChange: gameNotifier.setGameTime,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 64),
+                Button(
+                  label:
+                      'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
+                  onPressed: () {
+                    gameNotifier.startGame();
+                  },
+                ),
+                const SizedBox(height: 64),
+                const JoinGameContainer(),
+              ],
             ),
           ),
         ),

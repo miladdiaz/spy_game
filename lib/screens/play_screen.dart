@@ -17,15 +17,18 @@ class PlayScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 13, 63),
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/dark_house.png"),
-              fit: BoxFit.contain,
-              alignment: Alignment.bottomCenter,
-            ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/dark_house.png"),
+            fit: BoxFit.contain,
+            alignment: Alignment.bottomCenter,
           ),
+        ),
+        child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               const PlayScreenHeader(),
