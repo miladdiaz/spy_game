@@ -36,7 +36,7 @@ class GameNotifier extends Notifier<Game> {
 
   Future<void> startGame() async {
     // set state of game
-    state = state.copyWith(state: GameState.waiting);
+    state = state.copyWith(status: GameStatus.waiting);
 
     // reset current player index
     state = state.copyWith(currentPlayerIndex: 0);
@@ -56,7 +56,7 @@ class GameNotifier extends Notifier<Game> {
   }
 
   void startTimer() {
-    state = state.copyWith(state: GameState.timer, isShowWord: false);
+    state = state.copyWith(status: GameStatus.timer, isShowWord: false);
   }
 
   Future<List<Game>> getGames() async {

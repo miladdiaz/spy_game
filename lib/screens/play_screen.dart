@@ -44,13 +44,13 @@ class PlayScreen extends ConsumerWidget {
                         children: [
                           const Logo(),
                           const SizedBox(height: 16),
-                          switch (game.state) {
-                            GameState.idle => const Text('Idle'),
-                            GameState.waiting =>
+                          switch (game.status) {
+                            GameStatus.idle => const Text('Idle'),
+                            GameStatus.waiting =>
                               const Text('Waiting for players'),
-                            GameState.started => const WordBox(),
-                            GameState.timer => TimerWidget(time: game.time),
-                            GameState.finished => const Text('Finished'),
+                            GameStatus.started => const WordBox(),
+                            GameStatus.timer => TimerWidget(time: game.time),
+                            GameStatus.finished => const Text('Finished'),
                           },
                         ],
                       ),

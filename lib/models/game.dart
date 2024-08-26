@@ -1,6 +1,6 @@
 import 'package:spy_game/models/player.dart';
 
-enum GameState { idle, waiting, started, timer, finished }
+enum GameStatus { idle, waiting, started, timer, finished }
 
 class Game {
   final int citizenCount;
@@ -9,7 +9,7 @@ class Game {
   final bool isShowWord;
   final int currentPlayerIndex;
   final List<Player> players;
-  final GameState state;
+  final GameStatus status;
   final Duration time;
   final String? token;
 
@@ -20,7 +20,7 @@ class Game {
     this.isShowWord = false,
     this.currentPlayerIndex = 0,
     this.players = const [],
-    this.state = GameState.idle,
+    this.status = GameStatus.idle,
     this.time = const Duration(minutes: 1),
     this.token,
   });
@@ -40,7 +40,7 @@ class Game {
     bool? isShowWord,
     int? currentPlayerIndex,
     List<Player>? players,
-    GameState? state,
+    GameStatus? status,
     Duration? time,
     String? token,
   }) {
@@ -51,7 +51,7 @@ class Game {
       isShowWord: isShowWord ?? this.isShowWord,
       currentPlayerIndex: currentPlayerIndex ?? this.currentPlayerIndex,
       players: players ?? this.players,
-      state: state ?? this.state,
+      status: status ?? this.status,
       time: time ?? this.time,
       token: token ?? this.token,
     );
