@@ -2,17 +2,23 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/env.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:spy_game/models/player.dart';
 
 class GameNotifier extends Notifier<Game> {
   @override
   Game build() {
     return const Game();
+  }
+
+  void setPlayers(List<Player> players) {
+    state = state.copyWith(players: players);
+  }
+
+  void setToken(String token) {
+    state = state.copyWith(token: token);
   }
 
   void setCitizenCount(int value) {
@@ -74,35 +80,6 @@ class GameNotifier extends Notifier<Game> {
     final result = jsonDecode(response.body);
 
     state = state.copyWith(token: result['token'], word: result['word']);
-  }
-
-  void startSocket() {
-    io.Socket socket = io.io(
-      backendUrl,
-      io.OptionBuilder().setTransports(['websocket']).build(),
-    );
-
-    socket.onConnect((_) {
-      print('connect');
-      socket.emit('joinGame', {'token': state.token});
-    });
-
-    socket.on('event', (data) {
-      List<Player> p = List.from(data['players']
-          .map((e) => const Player(name: "player", role: "player")));
-
-      state = state.copyWith(players: p);
-    });
-
-    socket.onDisconnect((_) => print('disconnect'));
-    socket.on('fromServer', (_) => print(_));
-    socket.on('error', (_) => print(_));
-    socket.on('connect_error', (_) => print(_));
-    socket.on('connecting', (_) => print(_));
-  }
-
-  void joinGame(String token) {
-    state = state.copyWith(token: token);
   }
 }
 

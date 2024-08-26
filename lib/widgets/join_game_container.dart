@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/providers/socket_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 
 class JoinGameContainer extends ConsumerStatefulWidget {
@@ -20,7 +20,8 @@ class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final gameNotifier = ref.read(gameNotifierProvider.notifier);
+    final socketNotifier = ref.read(socketNotifierProvider.notifier);
+    final socket = ref.watch(socketNotifierProvider);
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
@@ -64,11 +65,11 @@ class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
           ),
           const SizedBox(height: 16),
           Button(
+            isLoading: socket.isLoading,
             color: Colors.green,
             label: 'Join a game',
             onPressed: () {
-              gameNotifier.joinGame(tokenController.text);
-              Navigator.pushNamed(context, '/play');
+              socketNotifier.start(tokenController.text);
             },
           ),
         ],

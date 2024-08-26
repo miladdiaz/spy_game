@@ -14,8 +14,6 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
-    final gameNotifier = ref.read(gameNotifierProvider.notifier);
-    gameNotifier.startSocket();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 13, 63),
