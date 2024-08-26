@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/helpers/number.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/widgets/logo.dart';
 import 'package:spy_game/providers/game_provider.dart';
@@ -37,13 +36,7 @@ class PlayScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Sidebar(
-                      position: "left",
-                      players: game.players
-                          .where((element) =>
-                              isEven(game.players.indexOf(element)))
-                          .toList(),
-                    ),
+                    Sidebar(position: "left", players: game.players),
                     Expanded(
                       flex: 3,
                       child: Column(
@@ -69,7 +62,7 @@ class PlayScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const Sidebar(position: "right"),
+                    Sidebar(position: "right", players: game.players),
                   ],
                 ),
               ),
