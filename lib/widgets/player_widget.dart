@@ -27,16 +27,13 @@ class PlayerWidget extends ConsumerWidget {
                 color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(Icons.person),
+              child: const Icon(Icons.person, color: Colors.black),
             ),
             Positioned(
               bottom: 0,
               child: Container(
                 width: 24,
                 height: 24,
-
-                // alignment: Alignment.center,
-                // padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(16),
@@ -69,7 +66,6 @@ class PlayerWidget extends ConsumerWidget {
                   index > game.currentPlayerIndex
                       ? Icons.visibility_off
                       : Icons.visibility,
-                  color: Colors.white,
                   size: 20,
                 ),
               ),
