@@ -6,6 +6,7 @@ import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'package:spy_game/models/player.dart';
+import 'package:spy_game/providers/socket_provider.dart';
 
 class GameNotifier extends Notifier<Game> {
   @override
@@ -46,6 +47,8 @@ class GameNotifier extends Notifier<Game> {
     state = state.copyWith(word: word);
 
     await createGameOnServer();
+
+    ref.read(socketNotifierProvider.notifier).start(state.token!);
   }
 
   void setShowWord(bool value) {

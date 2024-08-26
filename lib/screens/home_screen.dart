@@ -83,9 +83,7 @@ class HomeScreen extends ConsumerWidget {
                     label:
                         'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
                     onPressed: () {
-                      gameNotifier.startGame().then((value) {
-                        Navigator.pushNamed(context, '/play');
-                      });
+                      gameNotifier.startGame();
                     },
                   ),
                   const SizedBox(height: 64),
