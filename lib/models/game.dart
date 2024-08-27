@@ -1,6 +1,6 @@
 import 'package:spy_game/models/player.dart';
 
-enum GameStatus { idle, waiting, started, timer, finished }
+enum GameStatus { idle, waiting, timer, finished }
 
 class Game {
   final int citizenCount;
