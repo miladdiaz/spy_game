@@ -39,7 +39,7 @@ class GameNotifier extends Notifier<Game> {
     state = state.copyWith(time: Duration(minutes: value));
   }
 
-  Future<void> startGame() async {
+  Future<void> createGame() async {
     // set state of game
     state = state.copyWith(status: GameStatus.waiting);
 
