@@ -12,6 +12,7 @@ class Game {
   final GameStatus status;
   final Duration time;
   final String? token;
+  final String? creatorDeviceId;
 
   const Game({
     this.citizenCount = 2,
@@ -23,6 +24,7 @@ class Game {
     this.status = GameStatus.idle,
     this.time = const Duration(minutes: 1),
     this.token,
+    this.creatorDeviceId,
   });
 
   factory Game.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class Game {
       citizenCount: json['citizenCount'],
       spyCount: json['spyCount'],
       word: json['word'],
+      creatorDeviceId: json['creatorDeviceId'],
     );
   }
 
@@ -43,6 +46,7 @@ class Game {
     GameStatus? status,
     Duration? time,
     String? token,
+    String? creatorDeviceId,
   }) {
     return Game(
       citizenCount: citizenCount ?? this.citizenCount,
@@ -54,6 +58,7 @@ class Game {
       status: status ?? this.status,
       time: time ?? this.time,
       token: token ?? this.token,
+      creatorDeviceId: creatorDeviceId ?? this.creatorDeviceId,
     );
   }
 }

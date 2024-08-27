@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/providers/socket_provider.dart';
+import 'package:spy_game/providers/user_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/logo.dart';
 import 'package:spy_game/providers/game_provider.dart';
@@ -16,6 +17,7 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final user = ref.watch(userNotifierProvider);
     final socketNotifier = ref.read(socketNotifierProvider.notifier);
 
     Future<void> showMyDialog() async {
@@ -81,6 +83,9 @@ class PlayScreen extends ConsumerWidget {
                       child: Column(
                         children: [
                           const Logo(),
+                          Text(game.creatorDeviceId == user.deviceId
+                              ? "You are the creator"
+                              : "You are a player"),
                           const SizedBox(height: 16),
                           switch (game.status) {
                             GameStatus.idle => const Text('Idle'),

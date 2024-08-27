@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/models/web_socket.dart';
 import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/providers/socket_provider.dart';
+import 'package:spy_game/providers/user_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/counter.dart';
 import 'package:spy_game/widgets/join_game_container.dart';
@@ -13,6 +14,9 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // initialize user provider
+    ref.read(userNotifierProvider);
+
     final game = ref.watch(gameNotifierProvider);
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
 

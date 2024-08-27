@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spy_game/helpers/device.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
@@ -12,6 +13,10 @@ class GameNotifier extends Notifier<Game> {
   @override
   Game build() {
     return const Game();
+  }
+
+  void setCreatorDeviceId(String deviceId) {
+    state = state.copyWith(creatorDeviceId: deviceId);
   }
 
   void setPlayers(List<Player> players) {
@@ -44,7 +49,9 @@ class GameNotifier extends Notifier<Game> {
     // set random word from constants
     final random = Random();
     final word = constants.words[random.nextInt(constants.words.length)];
-    state = state.copyWith(word: word);
+    final deviceId = await getDeviceId();
+
+    state = state.copyWith(word: word, creatorDeviceId: deviceId);
 
     await createGameOnServer();
 
@@ -68,6 +75,8 @@ class GameNotifier extends Notifier<Game> {
   }
 
   Future<void> createGameOnServer() async {
+    //TODO: error handling
+
     final response = await http.post(
       Uri.http('localhost:3000', 'games'),
       headers: <String, String>{
@@ -77,6 +86,7 @@ class GameNotifier extends Notifier<Game> {
         "citizenCount": state.citizenCount,
         "spyCount": state.spyCount,
         "word": state.word,
+        "creatorDeviceId": state.creatorDeviceId,
       }),
     );
 
