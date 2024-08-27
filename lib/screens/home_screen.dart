@@ -16,6 +16,7 @@ class HomeScreen extends ConsumerWidget {
     final game = ref.watch(gameNotifierProvider);
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
 
+//TODO:fix if
     ref.listen(socketNotifierProvider, (previous, next) {
       if (previous?.status != next.status) {
         // if joined game successfully, navigate to play screen
