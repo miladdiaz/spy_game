@@ -30,6 +30,7 @@ class PlayScreen extends ConsumerWidget {
             content: const SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
+                  //TODO: fix text
                   Text('This is a demo alert dialog.'),
                   Text('Would you like to approve of this message?'),
                 ],
