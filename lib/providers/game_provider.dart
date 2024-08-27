@@ -15,28 +15,34 @@ class GameNotifier extends Notifier<Game> {
     return const Game();
   }
 
-  void setCreatorDeviceId(String deviceId) {
-    state = state.copyWith(creatorDeviceId: deviceId);
+  void setProperty({
+    int? citizenCount,
+    int? spyCount,
+    String? word,
+    bool? isShowWord,
+    int? currentPlayerIndex,
+    List<Player>? players,
+    GameStatus? status,
+    Duration? time,
+    String? token,
+    String? creatorDeviceId,
+  }) {
+    state = state.copyWith(
+      citizenCount: citizenCount,
+      spyCount: spyCount,
+      word: word,
+      isShowWord: isShowWord,
+      currentPlayerIndex: currentPlayerIndex,
+      players: players,
+      status: status,
+      time: time,
+      token: token,
+      creatorDeviceId: creatorDeviceId,
+    );
   }
 
-  void setPlayers(List<Player> players) {
-    state = state.copyWith(players: players);
-  }
-
-  void setToken(String token) {
-    state = state.copyWith(token: token);
-  }
-
-  void setCitizenCount(int value) {
-    state = state.copyWith(citizenCount: value);
-  }
-
-  void setSpyCount(int value) {
-    state = state.copyWith(spyCount: value);
-  }
-
-  Future<void> setGameTime(int value) async {
-    state = state.copyWith(time: Duration(minutes: value));
+  void startTimer() {
+    state = state.copyWith(status: GameStatus.timer, isShowWord: false);
   }
 
   Future<void> createGame() async {
@@ -56,14 +62,6 @@ class GameNotifier extends Notifier<Game> {
     await createGameOnServer();
 
     ref.read(socketNotifierProvider.notifier).start(state.token!);
-  }
-
-  void setShowWord(bool value) {
-    state = state.copyWith(isShowWord: value);
-  }
-
-  void startTimer() {
-    state = state.copyWith(status: GameStatus.timer, isShowWord: false);
   }
 
   Future<List<Game>> getGames() async {

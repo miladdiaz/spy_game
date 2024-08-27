@@ -65,19 +65,22 @@ class HomeScreen extends ConsumerWidget {
                       label: 'Spy',
                       count: 4,
                       startFrom: 1,
-                      onChange: gameNotifier.setSpyCount,
+                      onChange: (i) => gameNotifier.setProperty(spyCount: i),
                     ),
                     Counter(
                       label: 'Citizens',
                       count: 30,
                       startFrom: 2,
-                      onChange: gameNotifier.setCitizenCount,
+                      onChange: (i) =>
+                          gameNotifier.setProperty(citizenCount: i),
                     ),
                     Counter(
                       label: 'Time',
                       count: 30,
                       startFrom: 1,
-                      onChange: gameNotifier.setGameTime,
+                      onChange: (i) => gameNotifier.setProperty(
+                        time: Duration(minutes: i),
+                      ),
                     ),
                   ],
                 ),

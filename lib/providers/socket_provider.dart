@@ -56,11 +56,11 @@ class SocketProvider extends Notifier<WebSocket> {
           ),
         );
 
-        ref.read(gameNotifierProvider.notifier).setPlayers(p);
-        ref.read(gameNotifierProvider.notifier).setToken(data['token']);
-        ref
-            .read(gameNotifierProvider.notifier)
-            .setCreatorDeviceId(data['creatorDeviceId']);
+        ref.read(gameNotifierProvider.notifier).setProperty(
+              creatorDeviceId: data['creatorDeviceId'],
+              token: data['token'],
+              players: p,
+            );
       }
     });
   }
