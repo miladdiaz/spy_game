@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/models/game.dart';
+import 'package:spy_game/providers/socket_provider.dart';
+import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/logo.dart';
 import 'package:spy_game/providers/game_provider.dart';
 import 'package:spy_game/widgets/play_screen_header.dart';
@@ -14,6 +16,42 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final socketNotifier = ref.read(socketNotifierProvider.notifier);
+
+    Future<void> showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Are You Sure To Exit?'),
+            content: const SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('This is a demo alert dialog.'),
+                  Text('Would you like to approve of this message?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  socketNotifier.disconnect();
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 13, 63),
@@ -52,6 +90,14 @@ class PlayScreen extends ConsumerWidget {
                             GameStatus.timer => TimerWidget(time: game.time),
                             GameStatus.finished => const Text('Finished'),
                           },
+                          const SizedBox(height: 16),
+                          Button(
+                            color: Colors.red,
+                            label: "Exit Game",
+                            onPressed: () {
+                              showMyDialog();
+                            },
+                          )
                         ],
                       ),
                     ),

@@ -65,6 +65,7 @@ class SocketProvider extends Notifier<WebSocket> {
   void disconnect() {
     socket?.disconnect();
     socket?.destroy();
+    state = state.copyWith(status: WebSocketStatus.disconnected);
   }
 }
 
