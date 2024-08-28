@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spy_game/env.dart';
 import 'package:spy_game/helpers/device.dart';
 import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
@@ -76,7 +77,7 @@ class GameNotifier extends Notifier<Game> {
     //TODO: error handling
 
     final response = await http.post(
-      Uri.http('localhost:3000', 'games'),
+      isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

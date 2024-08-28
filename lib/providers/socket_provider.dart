@@ -19,7 +19,7 @@ class SocketProvider extends Notifier<WebSocket> {
     state = state.copyWith(isLoading: true);
 
     socket = io.io(
-      backendUrl,
+      isHttps ? "https://$backendUrl" : "http://$backendUrl",
       OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNewConnection()
