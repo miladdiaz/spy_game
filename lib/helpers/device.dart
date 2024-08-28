@@ -9,7 +9,7 @@ Future<String> getDeviceId() async {
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
       AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-      deviceId = androidInfo.serialNumber;
+      deviceId = androidInfo.id;
 
       break;
 
