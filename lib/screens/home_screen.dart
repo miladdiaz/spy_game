@@ -87,7 +87,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 64),
                 Button(
                   label:
-                      'Start with ${game.spyCount} Spy & ${game.citizenCount} citizens',
+                      'Create Game with ${game.spyCount} Spy & ${game.citizenCount} citizens',
                   onPressed: () {
                     gameNotifier.createGame();
                   },

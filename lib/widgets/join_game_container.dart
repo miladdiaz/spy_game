@@ -52,11 +52,13 @@ class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
                 borderSide: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(12),
               ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.white),
               ),
-              disabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.white),
               ),
               filled: true,
               fillColor: Colors.black.withOpacity(0.5),
