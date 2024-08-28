@@ -101,6 +101,18 @@ class PlayScreen extends ConsumerWidget {
                             GameStatus.finished => const Text('Finished'),
                           },
                           const SizedBox(height: 16),
+                          game.token != null &&
+                                  game.creatorDeviceId == user.deviceId &&
+                                  game.status == GameStatus.waiting
+                              ? Button(
+                                  color: Colors.green,
+                                  label: "Start Game",
+                                  onPressed: () {
+                                    socketNotifier.startGame(game.token!);
+                                  },
+                                )
+                              : const SizedBox(),
+                          const SizedBox(height: 16),
                           Button(
                             color: Colors.red,
                             label: "Exit Game",

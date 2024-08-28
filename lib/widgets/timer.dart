@@ -55,7 +55,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                   ? "00:00"
                   : '${duration!.inMinutes < 10 ? 0 : ""}${duration!.inMinutes}:${duration!.inSeconds.remainder(60) < 10 ? 0 : ""}${duration!.inSeconds.remainder(60)}',
           style: const TextStyle(
-            fontSize: 40,
+            fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

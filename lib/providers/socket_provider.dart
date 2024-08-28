@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spy_game/env.dart';
+import 'package:spy_game/models/game.dart';
 import 'package:spy_game/models/player.dart';
 import 'package:spy_game/models/web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -41,6 +42,7 @@ class SocketProvider extends Notifier<WebSocket> {
     });
 
     socket?.on('event', (data) {
+      print('onData: $data');
       if (data == "Game not found") {
         state = state.copyWith(isLoading: false, message: "Game not found");
         socket?.disconnect();
@@ -56,11 +58,21 @@ class SocketProvider extends Notifier<WebSocket> {
           ),
         );
 
+        GameStatus status = GameStatus.idle;
+
+        if (data['status'] == "waiting") {
+          status = GameStatus.waiting;
+        } else if (data['status'] == "timer") {
+          status = GameStatus.timer;
+        } else if (data['status'] == "finished") {
+          status = GameStatus.finished;
+        }
+
         ref.read(gameNotifierProvider.notifier).setProperty(
-              creatorDeviceId: data['creatorDeviceId'],
-              token: data['token'],
-              players: p,
-            );
+            creatorDeviceId: data['creatorDeviceId'],
+            token: data['token'],
+            players: p,
+            status: status);
       }
     });
   }
@@ -69,6 +81,10 @@ class SocketProvider extends Notifier<WebSocket> {
     socket?.disconnect();
     socket?.destroy();
     state = state.copyWith(status: WebSocketStatus.disconnected);
+  }
+
+  startGame(String token) {
+    socket?.emit('startGame', {'token': token});
   }
 }
 
