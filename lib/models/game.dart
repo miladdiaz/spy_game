@@ -6,8 +6,6 @@ class Game {
   final int citizenCount;
   final int spyCount;
   final String? word;
-  final bool isShowWord;
-  final int currentPlayerIndex;
   final List<Player> players;
   final GameStatus status;
   final Duration time;
@@ -18,8 +16,6 @@ class Game {
     this.citizenCount = 2,
     this.spyCount = 1,
     this.word,
-    this.isShowWord = false,
-    this.currentPlayerIndex = 0,
     this.players = const [],
     this.status = GameStatus.idle,
     this.time = const Duration(minutes: 1),
@@ -33,6 +29,13 @@ class Game {
       spyCount: json['spyCount'],
       word: json['word'],
       creatorDeviceId: json['creatorDeviceId'],
+      players: (json['players'] as List)
+          .map((player) => Player.fromJson(player))
+          .toList(),
+      status: GameStatus.values
+          .firstWhere((e) => e.toString() == 'GameStatus.${json['status']}'),
+      time: Duration(minutes: json['time']),
+      token: json['token'],
     );
   }
 
@@ -40,8 +43,6 @@ class Game {
     int? citizenCount,
     int? spyCount,
     String? word,
-    bool? isShowWord,
-    int? currentPlayerIndex,
     List<Player>? players,
     GameStatus? status,
     Duration? time,
@@ -52,8 +53,6 @@ class Game {
       citizenCount: citizenCount ?? this.citizenCount,
       spyCount: spyCount ?? this.spyCount,
       word: word ?? this.word,
-      isShowWord: isShowWord ?? this.isShowWord,
-      currentPlayerIndex: currentPlayerIndex ?? this.currentPlayerIndex,
       players: players ?? this.players,
       status: status ?? this.status,
       time: time ?? this.time,

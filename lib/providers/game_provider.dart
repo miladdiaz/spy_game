@@ -20,8 +20,6 @@ class GameNotifier extends Notifier<Game> {
     int? citizenCount,
     int? spyCount,
     String? word,
-    bool? isShowWord,
-    int? currentPlayerIndex,
     List<Player>? players,
     GameStatus? status,
     Duration? time,
@@ -32,8 +30,6 @@ class GameNotifier extends Notifier<Game> {
       citizenCount: citizenCount,
       spyCount: spyCount,
       word: word,
-      isShowWord: isShowWord,
-      currentPlayerIndex: currentPlayerIndex,
       players: players,
       status: status,
       time: time,
@@ -43,15 +39,12 @@ class GameNotifier extends Notifier<Game> {
   }
 
   void startTimer() {
-    state = state.copyWith(status: GameStatus.timer, isShowWord: false);
+    state = state.copyWith(status: GameStatus.timer);
   }
 
   Future<void> createGame() async {
     // set state of game
     state = state.copyWith(status: GameStatus.waiting);
-
-    // reset current player index
-    state = state.copyWith(currentPlayerIndex: 0);
 
     // set random word from constants
     final random = Random();

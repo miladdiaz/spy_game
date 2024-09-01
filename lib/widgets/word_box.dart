@@ -23,17 +23,14 @@ class WordBox extends ConsumerWidget {
           ),
         ),
         child: Center(
-          child: game.isShowWord
-              ? Text(
-                  game.players[game.currentPlayerIndex].role == 'spy'
-                      ? 'SPY'
-                      : game.word!,
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.3)),
-                )
-              : null,
+          child: Text(
+            game.word!,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withOpacity(0.3),
+            ),
+          ),
         ),
       ),
     );

@@ -7,6 +7,13 @@ class Player {
     this.role = "",
   });
 
+  factory Player.fromJson(Map<String, dynamic> json) {
+    return Player(
+      name: json['name'],
+      role: json['role'],
+    );
+  }
+
   Player copyWith({String? id, String? name, String? role}) {
     return Player(
       name: name ?? this.name,

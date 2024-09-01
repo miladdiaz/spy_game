@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/providers/game_provider.dart';
 
 class PlayerWidget extends ConsumerWidget {
   final int index;
@@ -8,9 +7,6 @@ class PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final game = ref.watch(gameNotifierProvider);
-    final isActive = game.currentPlayerIndex == index;
-
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width * 0.02),
@@ -24,7 +20,7 @@ class PlayerWidget extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(Icons.person, color: Colors.black),
@@ -41,9 +37,8 @@ class PlayerWidget extends ConsumerWidget {
                 child: Text(
                   (index + 1).toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color:
-                        isActive ? Colors.white : Colors.white.withOpacity(0.5),
+                  style: const TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -62,10 +57,8 @@ class PlayerWidget extends ConsumerWidget {
                   color: Colors.black.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Icon(
-                  index > game.currentPlayerIndex
-                      ? Icons.visibility_off
-                      : Icons.visibility,
+                child: const Icon(
+                  Icons.visibility,
                   size: 20,
                 ),
               ),
