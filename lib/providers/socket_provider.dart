@@ -80,6 +80,8 @@ class SocketProvider extends Notifier<WebSocket> {
     socket?.disconnect();
     socket?.destroy();
     state = state.copyWith(status: WebSocketStatus.disconnected);
+
+    ref.read(gameNotifierProvider.notifier).resetGame();
   }
 
   startGame(String token) {

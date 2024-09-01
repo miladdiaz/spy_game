@@ -89,7 +89,13 @@ class HomeScreen extends ConsumerWidget {
                   label:
                       'Create Game with ${game.spyCount} Spy & ${game.citizenCount} citizens',
                   onPressed: () {
-                    gameNotifier.createGame();
+                    gameNotifier.createGame().then((res) {
+                      if (res.type != 'success') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(res.message)),
+                        );
+                      }
+                    });
                   },
                 ),
                 const SizedBox(height: 64),

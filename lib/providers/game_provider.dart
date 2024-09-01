@@ -8,6 +8,7 @@ import 'package:spy_game/models/game.dart';
 import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'package:spy_game/models/player.dart';
+import 'package:spy_game/models/server_response.dart';
 import 'package:spy_game/providers/socket_provider.dart';
 
 class GameNotifier extends Notifier<Game> {
@@ -42,7 +43,11 @@ class GameNotifier extends Notifier<Game> {
     state = state.copyWith(status: GameStatus.timer);
   }
 
-  Future<void> createGame() async {
+  void resetGame() {
+    state = const Game();
+  }
+
+  Future<ServerResponseStatus> createGame() async {
     // set state of game
     state = state.copyWith(status: GameStatus.waiting);
 
@@ -53,9 +58,13 @@ class GameNotifier extends Notifier<Game> {
 
     state = state.copyWith(word: word, creatorDeviceId: deviceId);
 
-    await createGameOnServer();
+    ServerResponse response = await createGameOnServer();
 
-    ref.read(socketNotifierProvider.notifier).start(state.token!);
+    if (response.status.type == 'success' && response.data['token'] != null) {
+      ref.read(socketNotifierProvider.notifier).start(response.data['token']);
+    }
+
+    return response.status;
   }
 
   Future<List<Game>> getGames() async {
@@ -66,25 +75,38 @@ class GameNotifier extends Notifier<Game> {
     return List.from(result.map((e) => Game.fromJson(e)));
   }
 
-  Future<void> createGameOnServer() async {
-    //TODO: error handling
+  Future<ServerResponse> createGameOnServer() async {
+    // state = state.copyWith(players: []);
 
     final response = await http.post(
       isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode({
-        "citizenCount": state.citizenCount,
-        "spyCount": state.spyCount,
-        "word": state.word,
-        "creatorDeviceId": state.creatorDeviceId,
-      }),
+      body: jsonEncode(state.toJSON()),
     );
 
-    final result = jsonDecode(response.body);
+    ServerResponse result = ServerResponse.fromJson(jsonDecode(response.body));
 
-    state = state.copyWith(token: result['token'], word: result['word']);
+    return result;
+
+    // if(newStatus.type == 'error') {
+    //   throw Exception(newStatus.message);
+    // }
+
+    // Game newGame = Game.fromJson(result['data']);
+
+    //   if (result['data']['token'] == null ||
+    //       result['data']['word'] == null ||
+    //       result['data']['creatorDeviceId'] == null) {
+    //     throw Exception(result.status.message);
+    //   }
+
+    //   state = state.copyWith(
+    //     token: result['data']['token'],
+    //     word: result['data']['word'],
+    //     creatorDeviceId: result['data']['creatorDeviceId'],
+    //   );
   }
 }
 

@@ -20,4 +20,11 @@ class Player {
       role: role ?? this.role,
     );
   }
+
+  toJSON() {
+    return {
+      'name': name,
+      'role': role,
+    };
+  }
 }

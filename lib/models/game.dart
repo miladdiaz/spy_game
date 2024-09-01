@@ -60,4 +60,17 @@ class Game {
       creatorDeviceId: creatorDeviceId ?? this.creatorDeviceId,
     );
   }
+
+  toJSON() {
+    return {
+      'citizenCount': citizenCount,
+      'spyCount': spyCount,
+      'word': word,
+      'players': players.map((player) => player.toJSON()).toList(),
+      'status': status.toString().split('.').last,
+      'time': time.inMinutes,
+      'token': token,
+      'creatorDeviceId': creatorDeviceId,
+    };
+  }
 }
