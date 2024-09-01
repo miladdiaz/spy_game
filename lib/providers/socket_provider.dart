@@ -70,6 +70,7 @@ class SocketProvider extends Notifier<WebSocket> {
         ref.read(gameNotifierProvider.notifier).setProperty(
             creatorDeviceId: data['creatorDeviceId'],
             token: data['token'],
+            word: data['word'],
             players: p,
             status: status);
       }

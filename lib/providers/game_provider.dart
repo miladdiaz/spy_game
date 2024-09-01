@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/env.dart';
 import 'package:spy_game/helpers/device.dart';
 import 'package:spy_game/models/game.dart';
-import 'package:spy_game/constants/words.dart' as constants;
 import 'package:http/http.dart' as http;
 import 'package:spy_game/models/player.dart';
 import 'package:spy_game/models/server_response.dart';
@@ -51,12 +49,10 @@ class GameNotifier extends Notifier<Game> {
     // set state of game
     state = state.copyWith(status: GameStatus.waiting);
 
-    // set random word from constants
-    final random = Random();
-    final word = constants.words[random.nextInt(constants.words.length)];
+    // get device id
     final deviceId = await getDeviceId();
 
-    state = state.copyWith(word: word, creatorDeviceId: deviceId);
+    state = state.copyWith(creatorDeviceId: deviceId);
 
     ServerResponse response = await createGameOnServer();
 
