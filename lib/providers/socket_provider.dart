@@ -42,7 +42,6 @@ class SocketProvider extends Notifier<WebSocket> {
     });
 
     socket?.on('event', (data) {
-      print('onData: $data');
       if (data == "Game not found") {
         state = state.copyWith(isLoading: false, message: "Game not found");
         socket?.disconnect();
