@@ -52,9 +52,7 @@ class SocketProvider extends Notifier<WebSocket> {
         );
 
         List<Player> p = List.from(
-          data['players'].map(
-            (e) => const Player(name: "player", role: "player"),
-          ),
+          data['players'].map((p) => Player.fromJson(p)),
         );
 
         GameStatus status = GameStatus.idle;

@@ -26,7 +26,6 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   void countDown() {
     final DateTime now = DateTime.now();
-    print(end!.difference(DateTime.now()));
 
     setState(() {
       if (now.isAfter(end!)) {
