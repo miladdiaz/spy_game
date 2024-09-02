@@ -24,9 +24,9 @@ class WordBox extends ConsumerWidget {
         ),
         child: Center(
           child: Text(
-            game.word!,
+            game.word ?? "YOU ARE SPY!",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.white.withOpacity(0.3),
             ),
