@@ -72,8 +72,6 @@ class GameNotifier extends Notifier<Game> {
   }
 
   Future<ServerResponse> createGameOnServer() async {
-    // state = state.copyWith(players: []);
-
     final response = await http.post(
       isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
       headers: <String, String>{
@@ -85,24 +83,6 @@ class GameNotifier extends Notifier<Game> {
     ServerResponse result = ServerResponse.fromJson(jsonDecode(response.body));
 
     return result;
-
-    // if(newStatus.type == 'error') {
-    //   throw Exception(newStatus.message);
-    // }
-
-    // Game newGame = Game.fromJson(result['data']);
-
-    //   if (result['data']['token'] == null ||
-    //       result['data']['word'] == null ||
-    //       result['data']['creatorDeviceId'] == null) {
-    //     throw Exception(result.status.message);
-    //   }
-
-    //   state = state.copyWith(
-    //     token: result['data']['token'],
-    //     word: result['data']['word'],
-    //     creatorDeviceId: result['data']['creatorDeviceId'],
-    //   );
   }
 }
 
