@@ -6,6 +6,7 @@ import 'package:spy_game/models/player.dart';
 import 'package:spy_game/models/web_socket.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/providers/user_provider.dart';
 
 class SocketProvider extends Notifier<WebSocket> {
   io.Socket? socket;
@@ -17,17 +18,19 @@ class SocketProvider extends Notifier<WebSocket> {
 
   void start(String token) {
     state = state.copyWith(isLoading: true);
+    var deviceId = ref.read(userNotifierProvider.notifier).state.deviceId;
 
     socket = io.io(
       isHttps ? "https://$backendUrl" : "http://$backendUrl",
       OptionBuilder()
           .setTransports(['websocket'])
           .enableForceNewConnection()
+          .setQuery({'token': token, "deviceId": deviceId})
           .build(),
     );
 
     socket?.onConnect((_) {
-      socket?.emit('joinGame', {'token': token});
+      socket?.emit('joinGame');
     });
 
     socket?.on('error', (data) {
@@ -84,7 +87,7 @@ class SocketProvider extends Notifier<WebSocket> {
   }
 
   startGame(String token) {
-    socket?.emit('startGame', {'token': token});
+    socket?.emit('startGame');
   }
 }
 
