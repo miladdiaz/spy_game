@@ -10,36 +10,16 @@ class Logo extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.4,
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
+        image: const DecorationImage(
+          image: AssetImage("assets/images/spy.png"),
+          fit: BoxFit.contain,
+        ),
         borderRadius: BorderRadius.circular(100.0),
         border: Border.all(
           width: 8.0,
           color: Colors.white.withOpacity(0.3),
         ),
         color: Colors.white.withOpacity(0.1),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'SPY',
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: "Permanent Marker",
-              ),
-            ),
-            Text(
-              'Party Game',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white.withOpacity(0.8),
-                fontFamily: "Permanent Marker",
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
