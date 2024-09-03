@@ -24,8 +24,7 @@ class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
     final socket = ref.watch(socketNotifierProvider);
 
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 16,
@@ -40,39 +39,49 @@ class JoinGameContainerState extends ConsumerState<JoinGameContainer> {
       ),
       child: Column(
         children: [
-          TextField(
-            controller: tokenController,
-            keyboardType: TextInputType.text,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: 'Enter token',
-              labelStyle: const TextStyle(color: Colors.white),
-              border: const OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              filled: true,
-              fillColor: Colors.black.withOpacity(0.5),
-            ),
-            onChanged: (value) {},
+          const Text(
+            'Join a game',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          Button(
-            isLoading: socket.isLoading,
-            color: Colors.green,
-            label: 'Join a game',
-            onPressed: () {
-              socketNotifier.start(tokenController.text);
-            },
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: tokenController,
+                  keyboardType: TextInputType.text,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Enter token',
+                    labelStyle: const TextStyle(color: Colors.white),
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Button(
+                isLoading: socket.isLoading,
+                color: Colors.green,
+                label: 'Join',
+                onPressed: () {
+                  socketNotifier.start(tokenController.text);
+                },
+              ),
+            ],
           ),
         ],
       ),

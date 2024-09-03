@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/screens/home_screen.dart';
+import 'package:spy_game/screens/multi_device_screen.dart';
 import 'package:spy_game/screens/play_screen.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const HomeScreen(),
+        '/multiDevice': (context) => const MultiDeviceScreen(),
         '/play': (context) => const PlayScreen(),
       },
     );

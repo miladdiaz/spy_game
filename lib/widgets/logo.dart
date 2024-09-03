@@ -24,7 +24,7 @@ class Logo extends StatelessWidget {
             const Text(
               'SPY',
               style: TextStyle(
-                fontSize: 48,
+                fontSize: 36,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontFamily: "Permanent Marker",
@@ -33,7 +33,7 @@ class Logo extends StatelessWidget {
             Text(
               'Party Game',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 12,
                 color: Colors.white.withOpacity(0.8),
                 fontFamily: "Permanent Marker",
               ),
