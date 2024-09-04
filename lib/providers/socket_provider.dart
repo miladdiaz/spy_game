@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spy_game/env.dart';
