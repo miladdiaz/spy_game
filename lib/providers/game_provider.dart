@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/env.dart';
 import 'package:spy_game/helpers/device.dart';
@@ -9,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:spy_game/models/player.dart';
 import 'package:spy_game/models/server_response.dart';
 import 'package:spy_game/providers/socket_provider.dart';
+import 'package:spy_game/providers/user_provider.dart';
 
 class GameNotifier extends Notifier<Game> {
   @override
@@ -65,14 +64,13 @@ class GameNotifier extends Notifier<Game> {
   }
 
   Future<ServerResponse> createGameOnServer() async {
-    var hmacSha256 = Hmac(sha256, utf8.encode(secret));
-    var digest = hmacSha256.convert(utf8.encode(state.creatorDeviceId!));
+    String? authToken = ref.read(userNotifierProvider.notifier).state.authToken;
 
     final response = await http.post(
       isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': digest.toString(),
+        'Authorization': authToken!,
         'device-id': state.creatorDeviceId!,
       },
       body: jsonEncode(state.toJSON()),

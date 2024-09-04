@@ -18,7 +18,8 @@ class SocketProvider extends Notifier<WebSocket> {
 
   void start(String token) {
     state = state.copyWith(isLoading: true);
-    var deviceId = ref.read(userNotifierProvider.notifier).state.deviceId;
+    String? deviceId = ref.read(userNotifierProvider.notifier).state.deviceId;
+    String? authToken = ref.read(userNotifierProvider.notifier).state.authToken;
 
     socket = io.io(
       isHttps ? "https://$backendUrl" : "http://$backendUrl",
@@ -26,6 +27,7 @@ class SocketProvider extends Notifier<WebSocket> {
           .setTransports(['websocket'])
           .enableForceNewConnection()
           .setQuery({'token': token, "deviceId": deviceId})
+          .setAuth({'secret': authToken})
           .build(),
     );
 
