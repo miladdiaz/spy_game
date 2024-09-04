@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spy_game/env.dart';
@@ -83,7 +85,7 @@ class SocketProvider extends Notifier<WebSocket> {
   void disconnect() {
     socket?.disconnect();
     socket?.destroy();
-    state = state.copyWith(status: WebSocketStatus.disconnected);
+    state = state.copyWith(status: WebSocketStatus.disconnected, message: null);
 
     ref.read(gameNotifierProvider.notifier).resetGame();
   }
