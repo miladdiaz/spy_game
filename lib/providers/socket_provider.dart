@@ -19,7 +19,7 @@ class SocketProvider extends Notifier<WebSocket> {
   }
 
   void start(String token) {
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(isLoading: true, message: null);
     String? deviceId = ref.read(userNotifierProvider.notifier).state.deviceId;
     String? authToken = ref.read(userNotifierProvider.notifier).state.authToken;
 
@@ -38,47 +38,53 @@ class SocketProvider extends Notifier<WebSocket> {
     });
 
     socket?.on('error', (data) {
-      socket?.disconnect();
       state = state.copyWith(
           isLoading: false, message: data, status: WebSocketStatus.error);
+      disconnect();
     });
 
     socket?.on('connect_error', (data) {
       state = state.copyWith(
           isLoading: false, message: data, status: WebSocketStatus.error);
+
+      disconnect();
     });
 
     socket?.on('event', (data) {
       if (data == "Game not found") {
-        state = state.copyWith(isLoading: false, message: "Game not found");
-        socket?.disconnect();
-      } else {
         state = state.copyWith(
-          isLoading: false,
-          status: WebSocketStatus.connected,
-        );
-
-        List<Player> p = List.from(
-          data['players'].map((p) => Player.fromJson(p)),
-        );
-
-        GameStatus status = GameStatus.idle;
-
-        if (data['status'] == "waiting") {
-          status = GameStatus.waiting;
-        } else if (data['status'] == "timer") {
-          status = GameStatus.timer;
-        } else if (data['status'] == "finished") {
-          status = GameStatus.finished;
-        }
-
-        ref.read(gameNotifierProvider.notifier).setProperty(
-            creatorDeviceId: data['creatorDeviceId'],
-            token: data['token'],
-            word: data['word'],
-            players: p,
-            status: status);
+            isLoading: false,
+            status: WebSocketStatus.error,
+            message: "Game not found");
+        disconnect();
+        return;
       }
+
+      state = state.copyWith(
+        isLoading: false,
+        status: WebSocketStatus.connected,
+      );
+
+      List<Player> p = List.from(
+        data['players'].map((p) => Player.fromJson(p)),
+      );
+
+      GameStatus status = GameStatus.idle;
+
+      if (data['status'] == "waiting") {
+        status = GameStatus.waiting;
+      } else if (data['status'] == "timer") {
+        status = GameStatus.timer;
+      } else if (data['status'] == "finished") {
+        status = GameStatus.finished;
+      }
+
+      ref.read(gameNotifierProvider.notifier).setProperty(
+          creatorDeviceId: data['creatorDeviceId'],
+          token: data['token'],
+          word: data['word'],
+          players: p,
+          status: status);
     });
   }
 

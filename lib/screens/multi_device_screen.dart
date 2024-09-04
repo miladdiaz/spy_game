@@ -26,7 +26,7 @@ class MultiDeviceScreen extends ConsumerWidget {
       }
 
       // show error message if game not found
-      if (next.status != WebSocketStatus.connected && next.message.isNotEmpty) {
+      if (next.status == WebSocketStatus.error && next.message.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(next.message)),
         );
