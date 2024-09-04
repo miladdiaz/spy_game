@@ -63,14 +63,6 @@ class GameNotifier extends Notifier<Game> {
     return response.status;
   }
 
-  Future<List<Game>> getGames() async {
-    final response = await http.get(Uri.http('localhost:3000', 'games'));
-
-    final result = jsonDecode(response.body);
-
-    return List.from(result.map((e) => Game.fromJson(e)));
-  }
-
   Future<ServerResponse> createGameOnServer() async {
     final response = await http.post(
       isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
