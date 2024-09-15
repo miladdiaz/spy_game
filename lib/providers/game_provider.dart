@@ -67,7 +67,9 @@ class GameNotifier extends Notifier<Game> {
     String? authToken = ref.read(userNotifierProvider.notifier).state.authToken;
 
     final response = await http.post(
-      isHttps ? Uri.https(backendUrl, 'games') : Uri.http(backendUrl, 'games'),
+      isHttps
+          ? Uri.https(backendUrl, 'spy_games')
+          : Uri.http(backendUrl, 'spy_games'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': authToken!,
