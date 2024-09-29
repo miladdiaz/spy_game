@@ -39,6 +39,10 @@ class Game {
     );
   }
 
+  factory Game.fromFirestore(Object json) {
+    return Game.fromJson(json as Map<String, dynamic>);
+  }
+
   Game copyWith({
     int? citizenCount,
     int? spyCount,
