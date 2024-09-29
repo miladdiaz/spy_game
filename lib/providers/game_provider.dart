@@ -1,18 +1,30 @@
-import 'dart:convert';
+import 'dart:async';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/env.dart';
+import 'package:spy_game/constants/words.dart';
 import 'package:spy_game/helpers/device.dart';
+import 'package:spy_game/helpers/random_string.dart';
 import 'package:spy_game/models/game.dart';
-import 'package:http/http.dart' as http;
 import 'package:spy_game/models/player.dart';
-import 'package:spy_game/models/server_response.dart';
-import 'package:spy_game/providers/socket_provider.dart';
-import 'package:spy_game/providers/user_provider.dart';
+import 'package:spy_game/models/response.dart';
 
 class GameNotifier extends Notifier<Game> {
   @override
   Game build() {
+    setDeviceId();
     return const Game();
+  }
+
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? stream;
+  String? deviceId;
+  String? gameId;
+  Query<Map<String, dynamic>>? collectionReference;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  Future<void> setDeviceId() async {
+    deviceId = await getDeviceId();
   }
 
   void setProperty({
@@ -45,42 +57,110 @@ class GameNotifier extends Notifier<Game> {
     state = const Game();
   }
 
-  Future<ServerResponseStatus> createGame() async {
-    // set state of game
-    state = state.copyWith(status: GameStatus.waiting);
+  Future joinGame(String token) async {
+    Response response = Response();
 
-    // get device id
-    final deviceId = await getDeviceId();
+    // set gameId
+    await db
+        .collection("games")
+        .where("token", isEqualTo: token)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        response = Response(success: false, message: "Game not found");
+      } else {
+        response = Response(success: true);
+      }
 
-    state = state.copyWith(creatorDeviceId: deviceId);
+      gameId = value.docs.first.id;
+    });
 
-    ServerResponse response = await createGameOnServer();
-
-    if (response.status.type == 'success' && response.data['token'] != null) {
-      ref.read(socketNotifierProvider.notifier).start(response.data['token']);
+    if (response.success == false) {
+      return response;
     }
 
-    return response.status;
+    stream = db.collection('games').doc(gameId).snapshots().listen((event) {
+      state = Game.fromFirestore(event.data()!);
+    });
+
+    // add player to game
+    db.collection('games').doc(gameId).update({
+      'players': FieldValue.arrayUnion([
+        Player(
+          name: "Player",
+          deviceId: deviceId!,
+          status: "connected",
+        ).toJSON()
+      ]),
+    });
   }
 
-  Future<ServerResponse> createGameOnServer() async {
-    String? authToken = ref.read(userNotifierProvider.notifier).state.authToken;
+  void leaveGame() {
+    // disconnected player from game
+    db.collection('games').doc(gameId).update({
+      'players': state.players.map((p) {
+        var x = p.toJSON();
 
-    final response = await http.post(
-      isHttps
-          ? Uri.https(backendUrl, 'spy_games')
-          : Uri.http(backendUrl, 'spy_games'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': authToken!,
-        'device-id': state.creatorDeviceId!,
-      },
-      body: jsonEncode(state.toJSON()),
+        if (x['deviceId'] == deviceId) {
+          x['status'] = "disconnected";
+        }
+        return x;
+      }),
+    });
+
+    // close stream
+    stream?.cancel();
+  }
+
+  Future<Response> createGame() async {
+    state = state.copyWith(
+      creatorDeviceId: deviceId,
+      status: GameStatus.waiting,
+      token: getRandomString(6),
     );
 
-    ServerResponse result = ServerResponse.fromJson(jsonDecode(response.body));
+    Response response = Response();
 
-    return result;
+    await db.collection('games').add(state.toJSON()).then((value) {
+      joinGame(state.token!);
+      response = Response(success: true);
+    }).catchError((e) {
+      response = Response(success: false, message: e.toString());
+    });
+
+    return response;
+  }
+
+  void startGame() {
+    db.collection('games').doc(gameId).update({
+      'status': "timer",
+      'word': words[Random().nextInt(words.length)],
+      'players': assignPlayersRole(state.players, state.spyCount)
+          .map((p) => p.toJSON()),
+    });
+  }
+
+  Player getPlayerByDeviceId(String deviceId) {
+    return state.players.firstWhere((p) => p.deviceId == deviceId);
+  }
+
+  List<Player> assignPlayersRole(List<Player> players, int spyCount) {
+    List<Player> output = players;
+    List<int> spyIndexes = [];
+
+    // assign all players as citizen
+    output = output.map((p) => p.copyWith(role: "citizen")).toList();
+
+    for (int i = 0; i < spyCount; i++) {
+      int index = Random().nextInt(players.length);
+      if (spyIndexes.contains(index)) {
+        i--;
+        continue;
+      }
+      spyIndexes.add(index);
+      output[index] = output[index].copyWith(role: "spy");
+    }
+    return output;
   }
 }
 

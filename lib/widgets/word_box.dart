@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/providers/game_provider.dart';
+import 'package:spy_game/providers/user_provider.dart';
 
 class WordBox extends ConsumerWidget {
   const WordBox({super.key});
@@ -8,6 +9,8 @@ class WordBox extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final gameNotifier = ref.read(gameNotifierProvider.notifier);
+    final user = ref.watch(userNotifierProvider);
 
     return GestureDetector(
       child: Container(
@@ -24,7 +27,9 @@ class WordBox extends ConsumerWidget {
         ),
         child: Center(
           child: Text(
-            game.word ?? "YOU ARE SPY!",
+            gameNotifier.getPlayerByDeviceId(user.deviceId!).role == "spy"
+                ? "YOU ARE SPY!"
+                : game.word!,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

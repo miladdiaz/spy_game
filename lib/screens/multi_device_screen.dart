@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spy_game/models/web_socket.dart';
 import 'package:spy_game/providers/game_provider.dart';
-import 'package:spy_game/providers/socket_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/counter.dart';
 import 'package:spy_game/widgets/logo.dart';
@@ -14,24 +12,6 @@ class MultiDeviceScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
     final gameNotifier = ref.read(gameNotifierProvider.notifier);
-
-    ref.listen(socketNotifierProvider, (previous, next) {
-      if (previous?.status == next.status) {
-        return;
-      }
-
-      // if joined game successfully, navigate to play screen
-      if (next.status == WebSocketStatus.connected) {
-        Navigator.pushNamed(context, '/play');
-      }
-
-      // show error message if game not found
-      if (next.status == WebSocketStatus.error && next.message.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.message)),
-        );
-      }
-    });
 
     return Scaffold(
       extendBody: true,
@@ -48,12 +28,11 @@ class MultiDeviceScreen extends ConsumerWidget {
         ),
         child: SafeArea(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Logo(),
+              // Text(game)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Counter(
                     label: 'Spy',
@@ -81,13 +60,17 @@ class MultiDeviceScreen extends ConsumerWidget {
               Button(
                 label:
                     'Create Game with ${game.spyCount} Spy & ${game.citizenCount} citizens',
-                onPressed: () {
-                  gameNotifier.createGame().then((res) {
-                    if (res.type != 'success') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(res.message)),
-                      );
-                    }
+                onPressed: () async {
+                  await gameNotifier.createGame().then((res) {
+                    if (!context.mounted) return;
+                    Navigator.pushNamed(context, '/play');
+                  }).catchError((e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(e.toString()),
+                      ),
+                    );
                   });
                 },
               ),

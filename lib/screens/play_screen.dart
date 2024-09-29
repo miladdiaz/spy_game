@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spy_game/models/game.dart';
-import 'package:spy_game/providers/socket_provider.dart';
 import 'package:spy_game/providers/user_provider.dart';
 import 'package:spy_game/widgets/button.dart';
 import 'package:spy_game/widgets/logo.dart';
@@ -17,8 +16,8 @@ class PlayScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final game = ref.watch(gameNotifierProvider);
+    final gameNotifier = ref.read(gameNotifierProvider.notifier);
     final user = ref.watch(userNotifierProvider);
-    final socketNotifier = ref.read(socketNotifierProvider.notifier);
 
     Future<void> showMyDialog() async {
       return showDialog<void>(
@@ -27,15 +26,7 @@ class PlayScreen extends ConsumerWidget {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Are You Sure To Exit?'),
-            content: const SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  //TODO: fix text
-                  Text('This is a demo alert dialog.'),
-                  Text('Would you like to approve of this message?'),
-                ],
-              ),
-            ),
+            content: const SingleChildScrollView(),
             actions: <Widget>[
               TextButton(
                 child: const Text('Cancel'),
@@ -46,7 +37,8 @@ class PlayScreen extends ConsumerWidget {
               TextButton(
                 child: const Text('Yes'),
                 onPressed: () {
-                  socketNotifier.disconnect();
+                  gameNotifier.leaveGame();
+                  gameNotifier.resetGame();
                   Navigator.pushNamed(context, '/');
                 },
               ),
@@ -108,7 +100,7 @@ class PlayScreen extends ConsumerWidget {
                                   color: Colors.green,
                                   label: "Start Game",
                                   onPressed: () {
-                                    socketNotifier.startGame(game.token!);
+                                    gameNotifier.startGame();
                                   },
                                 )
                               : const SizedBox(),
